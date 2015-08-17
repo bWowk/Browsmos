@@ -1,9 +1,9 @@
 function World(canvas) {
 	// Constants
 	this.transfer_rate_k = 0.25;
-	
+
 	// Variables and setup
-	this.cells = [];		// Array of 
+	this.cells = [];		// Array of
 	this.canvas = canvas;
 	this.ctx = this.canvas.getContext('2d');
 	this.cam = new Camera(canvas);
@@ -21,18 +21,18 @@ function World(canvas) {
 	this.has_started = false;	// Indicates if the intro menu has been dismissed at least once
 	this.debug = false;
 	this.shadows = true;
-	this.music = new MusicPlayer(
-		[	// Music tracks (filename, song name, artist)
-			['music/Pitx_-_Black_Rainbow.ogg', 'Black Rainbow', 'Pitx'], 
-			['music/rewob_-_Circles.ogg', 'Circles', 'rewob'],
-		], 
-		{	// Sound effects (identifier, filename)
-			'blip': ['fx/blip.ogg'],
-			'win': ['fx/win.ogg'],
-			'death': ['fx/death.ogg'],
-			'bounce': ['fx/bounce.ogg'],
-		}
-	);
+	// this.music = new MusicPlayer(
+	// 	[	// Music tracks (filename, song name, artist)
+	// 		['music/Pitx_-_Black_Rainbow.ogg', 'Black Rainbow', 'Pitx'],
+	// 		['music/rewob_-_Circles.ogg', 'Circles', 'rewob'],
+	// 	],
+	// 	{	// Sound effects (identifier, filename)
+	// 		'blip': ['fx/blip.ogg'],
+	// 		'win': ['fx/win.ogg'],
+	// 		'death': ['fx/death.ogg'],
+	// 		'bounce': ['fx/bounce.ogg'],
+	// 	}
+	// );
 
 	// Methods
 	this.init = function() {
@@ -44,7 +44,7 @@ function World(canvas) {
 			document.addEventListener('mousewheel', this.mouse_scroll, false);
 			window.addEventListener("keydown", this.key_down, false);
 			window.addEventListener("blur", function() {world.pause(true);}, false);
-			
+
 			document.getElementById("mute").addEventListener('click', function() {world.music.mute();}, false);
 			document.getElementById("newlevel").addEventListener('click', function() {world.load_level();}, false);
 			document.getElementById("pause").addEventListener('click', function() {world.pause();}, false);
@@ -53,19 +53,19 @@ function World(canvas) {
 			document.getElementById("deathmessage").addEventListener('click', function() {world.load_level();}, false);
 			document.getElementById("warningmessage").addEventListener('click', function() {world.load_level();}, false);
 			document.getElementById("successmessage").addEventListener('click', function() {world.load_level();}, false);
-			
+
 			document.getElementById("playbutton").addEventListener('click', function() {
 				world.toggle_help();
 				// Play a sound in order to allow any sound playback at all on iOS
-				world.music.play_sound("win");
+				// world.music.play_sound("win");
 			}, false);
 		}
-		
-		this.music.init();
+
+		// this.music.init();
 	};
 	this.toggle_help = function() {
 		var overlay = document.getElementById("helpoverlay");
-		
+
 		// If overlay is hidden
 		if (overlay.style.display == "none") {
 			this.pause(true);					// Pause the game
@@ -74,11 +74,11 @@ function World(canvas) {
 		else {
 			overlay.style.display = "none";		// Hide overlay
 		}
-		
+
 		// If we're just now starting the game
 		if (!this.has_started) {
 			this.load_level();
-			this.music.play_song();
+			// this.music.play_song();
 			this.has_started = true;
 		}
 	};
@@ -93,7 +93,7 @@ function World(canvas) {
 			// Pause
 			this.show_message("pausedmessage");
 			this.paused = true;
-			this.music.lower_volume();
+			// this.music.lower_volume();
 		}
 	};
 	this.zoom_to_player = function() {
@@ -105,13 +105,13 @@ function World(canvas) {
 		this.user_did_zoom = false;
 		this.won = false;
 		this.clear_msgs();
-		
+
 		// Define level boundary
 		this.level_radius = 500;
-		
+
 		// Define the player first
 		this.cells.push(new Cell(0, 0, 10));
-		
+
 		// Generate a bunch of random cells
 		var num_cells = 30;
 		var rad, ang, r, x, y, cell;
@@ -141,7 +141,7 @@ function World(canvas) {
 		this.cam.x_target = this.cam.x;
 		this.cam.y_target = this.cam.y;
 		this.zoom_to_player();
-		
+
 		// Count total cell mass for loaded level
 		this.level_total_mass = 0;
 		for (var i=0; i<this.cells.length; i++)
@@ -161,20 +161,20 @@ function World(canvas) {
 			var mag = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 			dx /= mag;
 			dy /= mag;
-			
+
 			// Reduce force in proportion to area
 			var area = player.area();
 			var fx = dx * (5/9);// (400 / (area + 64));
 			var fy = dy * (5/9);//(400 / (area + 64));
-			
+
 			// Push player
 			player.x_veloc += fx;
 			player.y_veloc += fy;
-			
+
 			// Lose some mass (shall we say, 1/25?)
 			var expense = (area/25) / (2*Math.PI*player.radius);
 			player.radius -= expense;
-			
+
 			// Shoot off the expended mass in opposite direction
 			var newrad = Math.sqrt((area/20)/Math.PI);
 			var newx = player.x_pos - (dx * (player.radius + newrad + 1)); // The +1 is for cushioning!
@@ -185,7 +185,7 @@ function World(canvas) {
 			this.cells.push(newcell);
 
 			// Blip!
-			this.music.play_sound("blip");
+			// this.music.play_sound("blip");
 		}
 	};
 	this.click_at_point = function(x, y) {
@@ -193,7 +193,7 @@ function World(canvas) {
 			// Convert view coordinates (clicked) to world coordinates
 			x = this.cam.viewport_to_world_x(x);
 			y = this.cam.viewport_to_world_y(y);
-		
+
 			// Push player
 			this.push_player_from(x, y);
 		}
@@ -201,7 +201,7 @@ function World(canvas) {
 	this.touch_start = function(ev) {
 		ev.preventDefault();		// Prevent dragging
 		var touch = ev.touches[0];	// Just pay attention to first touch
-		
+
 		world.click_at_point(touch.pageX, touch.pageY);
 	};
 	this.mouse_down = function(ev) {
@@ -218,7 +218,7 @@ function World(canvas) {
 	};
 	this.mouse_scroll = function(event) {
 		var delta = 0;
- 
+
 		if (!event) event = window.event;
 
 		// normalize the delta
@@ -230,7 +230,7 @@ function World(canvas) {
 			delta = -event.detail / 2;
 		}
 		delta = delta / Math.abs(delta);
-		
+
 		if (delta != 0) {
 			world.user_did_zoom = true;
 			if (delta > 0)
@@ -244,11 +244,11 @@ function World(canvas) {
 		if (!e)	var e = window.event;
 		if (e.keyCode) code = e.keyCode;
 		else if (e.which) code = e.which;
-		
+
 		if (world.debug)
 			console.log("Pressed key with code " + code);
-		
-		switch (code){ 
+
+		switch (code){
 			case 80:	// P
 				world.pause();
 				break;
@@ -264,17 +264,17 @@ function World(canvas) {
 			case 83:	// S
 				world.shadows = !world.shadows;
 				break;
-			case 77:	// M
-				world.music.mute();
-				break;
-			case 78:	// N
-				world.music.next_song();
-				break;
+			// case 77:	// M
+			// 	world.music.mute();
+			// 	break;
+			// case 78:	// N
+			// 	world.music.next_song();
+			// 	break;
 		}
 	};
 	this.transfer_mass = function(cell1, cell2) {
 		var player = this.get_player();
-		
+
 		// Determine bigger cell
 		var bigger = cell1;
 		var smaller = cell2;
@@ -282,26 +282,26 @@ function World(canvas) {
 			bigger = cell2;
 			smaller = cell1;
 		}
-		
+
 		// Overlap amount will affect transfer amount
 		var overlap = (cell1.radius + cell2.radius - cell1.distance_from(cell2)) / (2 * smaller.radius);
 		if (overlap > 1) overlap = 1;
 		overlap *= overlap;
 		var mass_exchange = overlap * smaller.area() * this.frame_delta;
-		
+
 		smaller.radius -= mass_exchange / (2*Math.PI*smaller.radius);
 		bigger.radius += mass_exchange / (2*Math.PI*bigger.radius);
-		
+
 		// If the player is the one gaining mass here, zoom the camera
 		if (bigger === player && !this.user_did_zoom) {
 			this.zoom_to_player();
 		}
-		
-		
+
+
 		// Check if we just killed one of the cells
 		if (smaller.radius <=1) {
 			smaller.dead = true;
-			
+
 			// If we just killed the player, callback.
 			if (smaller === player)
 				this.player_did_die();
@@ -311,7 +311,7 @@ function World(canvas) {
 		var msgs = document.getElementsByClassName("messages");
 		for (var i=0; i<msgs.length; i++)
 			msgs[i].style.display = "none";
-		
+
 		// Re-show important messages that are still relevant
 		if (!forceclear) {
 			if (this.won)
@@ -328,9 +328,9 @@ function World(canvas) {
 		}
 	};
 	this.player_did_die = function() {
-		this.music.play_sound("death");
+		// this.music.play_sound("death");
 		this.show_message("deathmessage");
-		
+
 		// Cute animation thing
 		var player = this.get_player();
 		player.x_pos = player.y_pos = 0;
@@ -347,13 +347,13 @@ function World(canvas) {
 	this.player_did_win = function() {
 		if (!this.won) {
 			this.won = true;
-			this.music.play_sound("win");
+			// this.music.play_sound("win");
 			this.show_message("successmessage");
 		}
 	};
 	this.update = function() {
 		var player = this.get_player();
-		
+
 		// Advance timer
 		var currentTick = (new Date()).getTime();
 		this.frameSpacing = currentTick - this._lastTick;
@@ -365,7 +365,7 @@ function World(canvas) {
 		this.canvas.width = window.innerWidth;
 		center = [this.canvas.width/2, this.canvas.height/2];
 		viewport_radius = Math.min(this.canvas.height, this.canvas.width) / 2;
-		
+
 		// Background
 		this.ctx.fillStyle = this.surr_color;
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -373,11 +373,11 @@ function World(canvas) {
 		this.ctx.rect(0, 0, this.canvas.width, this.canvas.height);
 		this.ctx.closePath();
 		this.ctx.fill();
-		
+
 		// Level boundary
 		this.ctx.fillStyle = this.bg_color;
 		this.ctx.beginPath();
-		this.ctx.arc(this.cam.world_to_viewport_x(0), this.cam.world_to_viewport_y(0), 
+		this.ctx.arc(this.cam.world_to_viewport_x(0), this.cam.world_to_viewport_y(0),
 						Math.abs(this.level_radius*this.cam.scale), 0, Math.PI*2, true);
 		this.ctx.closePath();
 		this.ctx.fill();
@@ -385,19 +385,19 @@ function World(canvas) {
 			this.ctx.strokeStyle = "rgba(0,0,0,0.3)";
 			this.ctx.lineWidth = 2;
 			this.ctx.beginPath();
-			this.ctx.arc(this.cam.world_to_viewport_x(0)+2, this.cam.world_to_viewport_y(0)+4, 
+			this.ctx.arc(this.cam.world_to_viewport_x(0)+2, this.cam.world_to_viewport_y(0)+4,
 							this.level_radius*this.cam.scale, 0, Math.PI*2, true);
 			this.ctx.closePath();
 			this.ctx.stroke();
-		}		
+		}
 		this.ctx.strokeStyle = "#ffffff";
 		this.ctx.lineWidth = 2;
 		this.ctx.beginPath();
-		this.ctx.arc(this.cam.world_to_viewport_x(0), this.cam.world_to_viewport_y(0), 
+		this.ctx.arc(this.cam.world_to_viewport_x(0), this.cam.world_to_viewport_y(0),
 						this.level_radius*this.cam.scale, 0, Math.PI*2, true);
 		this.ctx.closePath();
 		this.ctx.stroke();
-		
+
 		// Run collisions and draw everything
 		var smallest_big_mass = 9999999999, total_usable_mass = 0, curr_area;
 		for (var i=0; i<this.cells.length; i++) {
@@ -411,16 +411,16 @@ function World(canvas) {
 						}
 					}
 					this.cells[i].update(this.frame_delta);
-				
+
 					// Get some stats about orb sizes
 					curr_area = this.cells[i].area();
 					if (this.cells[i].radius > this.get_player().radius) {
 						if (curr_area < smallest_big_mass)
 							smallest_big_mass = curr_area;
 					}
-					else 
+					else
 						total_usable_mass += curr_area;
-				
+
 					// If cell is outside of level bounds, fix it
 					var cell_x = this.cells[i].x_pos,
 						cell_y = this.cells[i].y_pos,
@@ -430,14 +430,14 @@ function World(canvas) {
 						// Do some homework
 						var cell_xvel = this.cells[i].x_veloc,
 							cell_yvel = this.cells[i].y_veloc;
-						
+
 						// Move cell safely inside bounds
 						this.cells[i].x_pos *= ((this.level_radius-cellrad-1) / dist_from_origin);
 						this.cells[i].y_pos *= ((this.level_radius-cellrad-1) / dist_from_origin);
 						cell_x = this.cells[i].x_pos;
 						cell_y = this.cells[i].y_pos;
 						dist_from_origin = Math.sqrt(Math.pow(cell_x, 2) + Math.pow(cell_y, 2));
-					
+
 						// Bounce!
 
 						// Find speed
@@ -453,20 +453,20 @@ function World(canvas) {
 						// Set new velocity components
 						this.cells[i].x_veloc = cell_speed * Math.cos(new_veloc_ang);
 						this.cells[i].y_veloc = cell_speed * Math.sin(new_veloc_ang);
-						
+
 						// If this cell is the player, make a bounce noise
-						if (i == 0)
-							this.music.play_sound("bounce");
+						// if (i == 0)
+						// 	this.music.play_sound("bounce");
 					}
 				}
-				
+
 				// If not the player, draw it now
 				if (i != 0) {
 					this.cells[i].draw(this.ctx, this.cam, this.shadows, this.get_player().radius);
 				}
 			}
 		}
-		
+
 		// React to statistical events
 		if (!player.dead && !this.paused && !this.won) {
 			if (smallest_big_mass == 9999999999) {
@@ -478,17 +478,17 @@ function World(canvas) {
 				this.show_message("warningmessage");
 			}
 		}
-		
+
 		// Draw player
 		player.draw(this.ctx, this.cam, this.shadows);
-		
+
 		// Camera-track player
 		this.cam.update(player.x_pos, player.y_pos, this.frame_delta);
-		
-		// Update music player
-		this.music.update();
+
+		// // Update music player
+		// this.music.update();
 	};
-	
+
 	// Call init
 	this.init();
 }
