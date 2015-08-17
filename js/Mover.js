@@ -4,22 +4,25 @@ function Mover() {
 	// Variables to hold size
 	this.radius = 20;
 
+	//Variable to hold entity id
+	this.eid = -1;
+
 	// Variables to hold current position
 	this.x_pos = 0;
 	this.y_pos = 0;
- 
+
 	// Variables to hold current velocity
 	this.x_veloc = 0;
 	this.y_veloc = 0;
-	
+
 	// Speed limits
 	this.x_veloc_max = 100;
 	this.y_veloc_max = 100;
- 
+
 	// Variables to hold x position bounds
 	this.x_min = 0;
 	this.x_max = 640;
-	
+
 	this.friction = 0.997;
 
 	// Methods
@@ -43,11 +46,11 @@ function Mover() {
 		var yvelsign = this.y_veloc / Math.abs(this.y_veloc);
 		if (Math.abs(this.y_veloc) > this.y_veloc_max)
 			this.y_veloc = yvelsign * this.y_veloc_max;
-	 
+
 		// Adjust the position, according to velocity.
 		this.x_pos += this.x_veloc * frame_delta;
 		this.y_pos += this.y_veloc * frame_delta;
-		
+
 		// Friction
 		this.x_veloc *= this.friction;
 		this.y_veloc *= this.friction;

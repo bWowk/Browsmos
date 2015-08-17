@@ -113,25 +113,25 @@ function World(canvas) {
 		this.cells.push(new Cell(0, 0, 10));
 
 		// Generate a bunch of random cells
-		var num_cells = 30;
-		var rad, ang, r, x, y, cell;
-		for (var i=0; i<num_cells; i++) {
-			if (i < 4)
-				rad = 5 + (Math.random()*5);	// Small cells
-			else if (i < 6)
-				rad = 40 + (Math.random()*15);	// Big cells
-			else
-				rad = 7 + (Math.random()*35);	// Everything else
-			ang = Math.random() * 2 * Math.PI;
-			r = Math.random() * (this.level_radius - 20 - rad - rad);
-			x = (30 + rad + r) * Math.sin(ang);
-			y = (30 + rad + r) * Math.cos(ang);
-			cell = new Cell(x, y, rad);
-			cell.x_veloc = (Math.random() - 0.5) * 0.35;
-			cell.y_veloc = (Math.random() - 0.5) * 0.35;
-			this.cells.push(cell);
-		}
-		delete cell;
+		// var num_cells = 30;
+		// var rad, ang, r, x, y, cell;
+		// for (var i=0; i<num_cells; i++) {
+		// 	if (i < 4)
+		// 		rad = 5 + (Math.random()*5);	// Small cells
+		// 	else if (i < 6)
+		// 		rad = 40 + (Math.random()*15);	// Big cells
+		// 	else
+		// 		rad = 7 + (Math.random()*35);	// Everything else
+		// 	ang = Math.random() * 2 * Math.PI;
+		// 	r = Math.random() * (this.level_radius - 20 - rad - rad);
+		// 	x = (30 + rad + r) * Math.sin(ang);
+		// 	y = (30 + rad + r) * Math.cos(ang);
+		// 	cell = new Cell(x, y, rad);
+		// 	cell.x_veloc = (Math.random() - 0.5) * 0.35;
+		// 	cell.y_veloc = (Math.random() - 0.5) * 0.35;
+		// 	this.cells.push(cell);
+		// }
+		// delete cell;
 
 		// Center camera over level
 		if (this.cam.x == 0 && this.cam.y == 0) {

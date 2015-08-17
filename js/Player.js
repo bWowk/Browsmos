@@ -2,7 +2,7 @@ function Cell(xpos, ypos, radius) {
 	// Inherit from Mover
 	this.inheritFrom = Mover;
 	this.inheritFrom();
-	
+
 	if (xpos)
 		this.x_pos = xpos;
 	if (ypos)
@@ -18,16 +18,33 @@ function Cell(xpos, ypos, radius) {
 
 	// Player color
 	this.fillStyle = "#00FF00";
-	
+
 	// Methods
 	this.reset = reset_player;
 	this.draw = draw_player;
-	this.push_up = function (mag) { if (!mag) mag=1; this.y_veloc -= mag; };
-	this.push_down = function (mag) { if (!mag) mag=1; this.y_veloc += mag; };
-	this.push_left = function (mag) { if (!mag) mag=1; this.x_veloc -= mag; };
-	this.push_right = function (mag) { if (!mag) mag=1; this.x_veloc += mag; };
-	this.verticalBounce = function () { this.y_veloc = -this.y_veloc * 0.4; };
+	var push_up = function (mag) { if (!mag) mag=1; this.y_veloc -= mag; };
+	var push_down = function (mag) { if (!mag) mag=1; this.y_veloc += mag; };
+	var push_left = function (mag) { if (!mag) mag=1; this.x_veloc -= mag; };
+	var push_right = function (mag) { if (!mag) mag=1; this.x_veloc += mag; };
+	var verticalBounce = function () { this.y_veloc = -this.y_veloc * 0.4; };
+
+		//Getters and setters
+	var getX = function() { return x; };
+  var getY = function() { return y; };
+  var setX = function(newX) { x = newX; };
+  var setY = function(newY) { y = newY; };
+
+	return {
+        getX: getX,
+        getY: getY,
+        setX: setX,
+        setY: setY,
+        id: id
+    }
+
 }
+
+
 
 function reset_cell()
 {
@@ -44,7 +61,7 @@ function draw_cell(ctx)
 	ctx.beginPath();
 	ctx.rect(this.x_pos, this.y_pos, this.width, this.height);
 	ctx.closePath();
-	ctx.fill(); 
+	ctx.fill();
 
 	this.last_y = this.y_pos;
 }
